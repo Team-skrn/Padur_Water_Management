@@ -5,26 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Padur Water Management</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
-    <link rel="stylesheet" href="app.css">
     <link rel="icon" href="IIT_Madras_Logo.ico" type="image/x-icon">
     <link rel="manifest" href="/Padur_Water_Management/manifest.json">
+    
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 { color: #333; }
+        .button-container { margin-top: 20px; }
+        .dashboard-button {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .dashboard-button:hover { background-color: #0056b3; }
+        .install-btn {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .update-banner {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: #222;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<body class="page-body">
+<body>
+
+    <img src="IIT_Madras_Logo.png" alt="IIT Madras Logo" width="250">
+    <h1>Padur Water Management</h1>
+    <h2>By IIT Madras</h2>
+
+    <h3>Language / भाषा / மொழி</h3>
+    <div class="button-container">
+        <a href="Tank_select_eng.html" class="dashboard-button">English</a>
+        <a href="Tank_select_hin.html" class="dashboard-button">हिन्दी</a>
+        <a href="Tank_select_tam.html" class="dashboard-button">தமிழ்</a>
+    </div>
+
+    <button id="install-button" class="install-btn" onclick="installPWA()">Install App</button>
+
     <script>
-        // ✅ Register Service Worker for PWA
+        // ✅ Register Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/Padur_Water_Management/service-worker.js')
                 .then((reg) => {
                     console.log("Service Worker Registered");
-
-                    // ✅ Check for updates
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed') {
-                                if (navigator.serviceWorker.controller) {
-                                    showUpdateNotification();
-                                }
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateNotification();
                             }
                         };
                     };
@@ -34,10 +86,8 @@
         // ✅ Show update notification
         function showUpdateNotification() {
             let updateBanner = document.createElement("div");
-            updateBanner.innerHTML = `
-                <div style="position: fixed; bottom: 10px; left: 10px; background: #222; color: #fff; padding: 10px; border-radius: 5px;">
-                    New version available! <button onclick="window.location.reload()">Update</button>
-                </div>`;
+            updateBanner.className = "update-banner";
+            updateBanner.innerHTML = `New version available! <button onclick="window.location.reload()">Update</button>`;
             document.body.appendChild(updateBanner);
         }
 
@@ -68,25 +118,8 @@
             });
         }
     </script>
-    <button id="install-button" style="display: none; font-size: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="installPWA()">
-        Install App
-    </button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <img src="IIT_Madras_Logo.png" alt="Description of the image" width="250">
-    <div class="head">
-    
-    <h1>Padur Water Management</h1><br>
-    <h2>By IIT Madras</h2><br>
-
-
-    <h3>Language / भाषा / மொழி</h3><br>
-
-    <div class="button-container">
-        <center><a href="Tank_select_eng.html" class="dashboard-button">English</a></center><br>
-        <center><a href="Tank_select_hin.html" class="dashboard-button">हिन्दी</a></center><br>
-        <center><a href="Tank_select_tam.html" class="dashboard-button">தமிழ்</a></center><br>
-    </div>
 
 </body>
 </html>
