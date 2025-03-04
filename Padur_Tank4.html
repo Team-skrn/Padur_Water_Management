@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tank 4</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body class="page-body">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <img src="IIT_Madras_Logo.png" alt="Description of the image" width="250">
+    <h1>Padur Water Management</h1>
+    <h2>By IIT Madras</h2>
+  
+    <!--
+    <button onclick="location.href='Padur_Tank2.html';" style="border: none; background: none;">
+  <img src="Tank_2_txt.png" alt="Go to Tank 2" style="width: 250px;">
+</button>
+    <button onclick="location.href='Padur_Tank3.html';" style="border: none; background: none;">
+  <img src="Tank_3_txt.png" alt="Go to Tank 3" style="width: 250px;">
+</button>
+    <button onclick="location.href='Padur_Tank4.html';" style="border: none; background: none;">
+  <img src="Tank_4_txt.png" alt="Go to Tank 4" style="width: 250px;">
+</button>
+    -->
+    <!--
+    <div class="button-container">
+      <a href="Padur_Tank2.html" class="dashboard-button">Tank 2</a><br>
+      <a href="Padur_Tank3.html" class="dashboard-button">Tank 3</a><br>
+      <a href="Padur_Tank4.html" class="dashboard-button">Tank 4</a><br>
+    </div>
+
+    -->
+
+    <div class="button-container">
+      <center><a href="Tank_select_eng.html" class="dashboard-button" text-align="center";>← Main Page</a></center><br>
+      <center><a href="index.html" class="dashboard-button" text-align="center";>மொழியை மாற்ற / भाषा बदलें</a><br></center><br>
+      
+    </div>
+    
+    <h1>Tank 4 </h1>
+</div>
+    <h3>Current Level</h3>
+    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2691178/widgets/952136"></iframe>
+    <h3>Pump Status (Auto Mode)</h3>
+    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2691178/widgets/952137"></iframe>
+    <h3>Graph</h3>
+    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2691178/charts/5?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&title=Tank+4&type=line&xaxis=Time&yaxis=Level+%28cm%29&yaxismax=350&yaxismin=0"></iframe>
+    <h3>Yesterday's consumption</h3>
+    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2861390/widgets/1031871"></iframe>
+    <h3>Past 5 days Consumptions</h3>
+    <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2861390/charts/5?bgcolor=%23ffffff&color=%23d62020&days=5&dynamic=true&results=60&title=Tank+4+-+Consumption&type=column&update=15"></iframe>
+  </body>
+  </html>
