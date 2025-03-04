@@ -50,6 +50,23 @@
             border-radius: 5px;
         }
     </style>
+    <script>
+        const correctPassword = "Padur@123"; // Change this to your password
+
+        function checkPassword() {
+            if (localStorage.getItem("authenticated") === "true") return;
+
+            let userInput = prompt("Enter Password:");
+            if (userInput === correctPassword) {
+                localStorage.setItem("authenticated", "true");
+            } else {
+                alert("Incorrect password! Access denied.");
+                window.location.href = "https://www.google.com"; // Redirect if incorrect
+            }
+        }
+
+        checkPassword(); // Run password check on page load
+    </script>
 </head>
 <body>
 
