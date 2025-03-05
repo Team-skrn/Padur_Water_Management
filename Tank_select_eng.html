@@ -76,6 +76,61 @@
       <a href="Padur_Tank4.html" class="dashboard-button">Tank 4</a><br>
     </div>
     -->
+<button id="install-button" class="install-btn" onclick="installPWA()">Install App</button>
 
+    <script>
+        // ✅ Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/Padur_Water_Management/service-worker.js')
+                .then((reg) => {
+                    console.log("Service Worker Registered");
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateNotification();
+                            }
+                        };
+                    };
+                }).catch((err) => console.error("Service Worker Registration Failed", err));
+        }
+
+        // ✅ Show update notification
+        function showUpdateNotification() {
+            let updateBanner = document.createElement("div");
+            updateBanner.className = "update-banner";
+            updateBanner.innerHTML = `New version available! <button onclick="window.location.reload()">Update</button>`;
+            document.body.appendChild(updateBanner);
+        }
+
+        // ✅ Handle PWA Install Button
+        let deferredPrompt;
+        window.addEventListener("beforeinstallprompt", (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById("install-button").style.display = "block";
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === "accepted") {
+                        console.log("PWA Installed");
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // ✅ Force Update Check on Load
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.getRegistration().then((reg) => {
+                if (reg) reg.update();
+            });
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   </body>
   </html>
