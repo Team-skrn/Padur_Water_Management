@@ -4,27 +4,25 @@ window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredPrompt = event;
 
-    // Ensure button exists before trying to modify it
-    const installButton = document.getElementById("installButton");
-    if (installButton) {
-        installButton.style.display = "block";
-
-        installButton.addEventListener("click", () => {
+    // Show install button on all pages
+    document.querySelectorAll(".installButton").forEach((button) => {
+        button.style.display = "block";
+        button.addEventListener("click", async () => {
             deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === "accepted") {
-                    console.log("User installed the app");
-                }
-                deferredPrompt = null;
-            });
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === "accepted") {
+                console.log("User installed the app");
+                button.style.display = "none"; // Hide after install
+            }
+            deferredPrompt = null;
         });
-    }
+    });
 });
 
-// Ensure button is visible even if event was missed
-document.addEventListener("DOMContentLoaded", () => {
-    const installButton = document.getElementById("installButton");
-    if (installButton) {
-        installButton.style.display = "block";
-    }
+// Detect if app is already installed
+window.addEventListener("appinstalled", () => {
+    console.log("PWA was installed");
+    document.querySelectorAll(".installButton").forEach((button) => {
+        button.style.display = "none"; // Hide install button after installation
+    });
 });
