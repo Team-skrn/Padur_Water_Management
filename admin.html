@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Configuration Manager</title>
+    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.secondary {
+            background: #17a2b8;
+        }
+
+        button.secondary:hover {
+            background: #138496;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            display: block;
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginContainer" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); text-align: center; max-width: 400px;">
+            <h1 style="color: #667eea; margin-bottom: 30px;">Admin Login</h1>
+            <div style="margin-bottom: 20px;">
+                <input type="password" id="passwordInput" placeholder="Enter Admin Password" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 5px; font-size: 16px;">
+            </div>
+            <button onclick="checkPassword()" style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">Login</button>
+            <p id="errorMsg" style="color: red; margin-top: 15px; display: none;">Incorrect password!</p>
+        </div>
+    </div>
+
+    <div id="adminContent" style="display: none;">
+    <div class="container">
+        <h1>🔧 Water Management System - Admin Panel</h1>
+        
+        <div id="message" class="message"></div>
+
+        <!-- CSV Management Section -->
+        <div class="section">
+            <h2>📊 CSV Configuration Management</h2>
+            <p style="margin-bottom: 15px; color: #666;">Download a sample CSV template, edit it with your page and translation data, then upload to generate config.js and translation files.</p>
+            
+            <div class="button-group">
+                <button class="secondary" onclick="generateAndDownloadSampleCSV()">📥 Download Sample CSV</button>
+                <button class="secondary" onclick="document.getElementById('csvFile').click()">📤 Upload & Generate Config</button>
+                <input type="file" id="csvFile" accept=".csv" style="display: none;" onchange="handleCSVUpload(event)">
+            </div>
+        </div>
+
+        <!-- Current Configuration Status -->
+        <div class="section">
+            <h2>✅ Current Configuration Status</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pages Configured</td>
+                        <td><span class="badge" id="pageCount">0</span></td>
+                        <td id="pageDetails">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td>Translation Languages</td>
+                        <td><span class="badge">10</span></td>
+                        <td>EN, ES, FR, AR, GU, HI, MR, TA, TE, SW</td>
+                    </tr>
+                    <tr>
+                        <td>Base Translation Keys</td>
+                        <td><span class="badge">41</span></td>
+                        <td>UI text, labels, buttons</td>
+                    </tr>
+                    <tr>
+                        <td>Page Translation Keys</td>
+                        <td><span class="badge" id="pageKeyCount">0</span></td>
+                        <td>Dynamic page names (page_*)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Download Generated Files -->
+        <div class="section">
+            <h2>💾 Download Generated Files</h2>
+            <p style="margin-bottom: 15px; color: #666;">After uploading a CSV, download the generated files to deploy.</p>
+            
+            <div class="button-group">
+                <button onclick="downloadConfigJS()">📄 config.js</button>
+                <button class="secondary" onclick="downloadAllTranslations()">🌍 All Translation Files</button>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="section" style="background: #e7f3ff; border-left-color: #17a2b8;">
+            <h2 style="border-bottom-color: #17a2b8; color: #17a2b8;">📖 How to Use</h2>
+            <ol style="margin-left: 20px; color: #333; line-height: 1.8;">
+                <li><strong>Download Sample CSV</strong> - Get a template with required columns</li>
+                <li><strong>Edit in Excel or Google Sheets</strong> - Add your pages, sensors, and translations</li>
+                <li><strong>Upload the CSV</strong> - System will generate config.js and all translation files</li>
+                <li><strong>Download Generated Files</strong> - Save config.js and translation JSON files</li>
+                <li><strong>Deploy to Server</strong> - Replace old files with the new ones</li>
+                <li><strong>Refresh the App</strong> - Changes load automatically</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const languages = ['en', 'es', 'fr', 'ar', 'gu', 'hi', 'mr', 'ta', 'te', 'sw'];
+        
+        const baseTranslations = {
+            'en': {"app_title":"IIT Madras Water Management","select_tank_sump":"Select the Tank/Sump","install_app":"Install App","back":"Back","water_level_monitoring":"IIT Madras Water Management","water_management":"","language_label":"Language:","language_select":"Select Language","reservoir":"Reservoir","overhead_tank":"Overhead Tank","history":"History","custom_range":"Custom Range","from":"From:","to":"To:","fetch_data":"Fetch Data","reservoir_history":"Reservoir Water Level History","overhead_tank_history":"Overhead Tank Water Level History","day_1":"1 Day","day_2":"2 Days","day_3":"3 Days","day_4":"4 Days","day_5":"5 Days","day_6":"6 Days","day_7":"7 Days","waiting_for_updates":"Waiting for updates...","waiting_for_history":"Waiting for history data...","line_color":"Graph Line Color","water_level_history":"Water Level History","enable_alerts":"Enable Alerts","repeat_alerts":"Repeat Alerts (every 5 min)","min_threshold":"Min","max_threshold":"Max"},
+            'hi': {"app_title":"IIT मद्रास जल प्रबंधन","select_tank_sump":"टैंक/सम्प चुनें","install_app":"ऐप इंस्टॉल करें","back":"वापस","water_level_monitoring":"IIT Madras जल प्रबंधन","water_management":"","language_label":"भाषा:","language_select":"भाषा चुनें","reservoir":"जलाशय","overhead_tank":"ओवरहेड टैंक","history":"इतिहास","custom_range":"कस्टम रेंज","from":"से:","to":"तक:","fetch_data":"डेटा प्राप्त करें","reservoir_history":"जलाशय जल स्तर का इतिहास","overhead_tank_history":"ओवरहेड टैंक जल स्तर का इतिहास","day_1":"1 दिन","day_2":"2 दिन","day_3":"3 दिन","day_4":"4 दिन","day_5":"5 दिन","day_6":"6 दिन","day_7":"7 दिन","waiting_for_updates":"अपडेट की प्रतीक्षा...","waiting_for_history":"इतिहास डेटा की प्रतीक्षा...","line_color":"ग्राफ लाइन रंग","water_level_history":"जल स्तर का इतिहास","enable_alerts":"अलर्ट सक्षम करें","repeat_alerts":"अलर्ट दोहराएं (हर 5 मिनट)","min_threshold":"न्यूनतम","max_threshold":"अधिकतम"},
+            'es': {"app_title":"Gestión del Agua IIT Madras","select_tank_sump":"Seleccionar Tanque/Sumidero","install_app":"Instalar Aplicación","back":"Atrás","water_level_monitoring":"Gestión del Agua IIT Madras","water_management":"","language_label":"Idioma:","language_select":"Seleccionar Idioma","reservoir":"Depósito","overhead_tank":"Tanque Elevado","history":"Historial","custom_range":"Rango Personalizado","from":"De:","to":"Hasta:","fetch_data":"Obtener Datos","reservoir_history":"Historial del Nivel de Agua del Depósito","overhead_tank_history":"Historial del Nivel de Agua del Tanque Elevado","day_1":"1 Día","day_2":"2 Días","day_3":"3 Días","day_4":"4 Días","day_5":"5 Días","day_6":"6 Días","day_7":"7 Días","waiting_for_updates":"Esperando actualizaciones...","waiting_for_history":"Esperando datos históricos...","line_color":"Color de Línea del Gráfico","water_level_history":"Historial del Nivel de Agua","enable_alerts":"Habilitar Alertas","repeat_alerts":"Repetir Alertas (cada 5 min)","min_threshold":"Mín","max_threshold":"Máx"},
+            'fr': {"app_title":"Gestion de l'Eau IIT Madras","select_tank_sump":"Sélectionner le Réservoir/Puisard","install_app":"Installer l'Application","back":"Retour","water_level_monitoring":"Gestion de l'Eau IIT Madras","water_management":"","language_label":"Langue:","language_select":"Sélectionner la Langue","reservoir":"Réservoir","overhead_tank":"Réservoir Surélevé","history":"Historique","custom_range":"Plage Personnalisée","from":"De:","to":"À:","fetch_data":"Récupérer les Données","reservoir_history":"Historique du Niveau d'Eau du Réservoir","overhead_tank_history":"Historique du Niveau d'Eau du Réservoir Surélevé","day_1":"1 Jour","day_2":"2 Jours","day_3":"3 Jours","day_4":"4 Jours","day_5":"5 Jours","day_6":"6 Jours","day_7":"7 Jours","waiting_for_updates":"En attente de mises à jour...","waiting_for_history":"En attente des données historiques...","line_color":"Couleur de la Ligne du Graphique","water_level_history":"Historique du Niveau d'Eau","enable_alerts":"Activer les Alertes","repeat_alerts":"Répéter les Alertes (toutes les 5 min)","min_threshold":"Min","max_threshold":"Max"},
+            'ar': {"app_title":"إدارة مياه IIT مدراس","select_tank_sump":"اختر خزان/بئر","install_app":"تثبيت التطبيق","back":"رجوع","water_level_monitoring":"إدارة مياه IIT مدراس","water_management":"","language_label":"اللغة:","language_select":"اختر اللغة","reservoir":"الخزان","overhead_tank":"الخزان العلوي","history":"السجل","custom_range":"نطاق مخصص","from":"من:","to":"إلى:","fetch_data":"جلب البيانات","reservoir_history":"سجل مستوى مياه الخزان","overhead_tank_history":"سجل مستوى مياه الخزان العلوي","day_1":"1 يوم","day_2":"2 أيام","day_3":"3 أيام","day_4":"4 أيام","day_5":"5 أيام","day_6":"6 أيام","day_7":"7 أيام","waiting_for_updates":"في انتظار التحديثات...","waiting_for_history":"في انتظار البيانات التاريخية...","line_color":"لون خط الرسم البياني","water_level_history":"سجل مستوى المياه","enable_alerts":"تفعيل التنبيهات","repeat_alerts":"تكرار التنبيهات (كل 5 دقائق)","min_threshold":"الحد الأدنى","max_threshold":"الحد الأقصى"},
+            'gu': {"app_title":"IIT મદ્રાસ જલ વ્યવસ્થાપન","select_tank_sump":"ટાંકી/સમ્પ પસંદ કરો","install_app":"ઍપ ઇન્સ્ટોલ કરો","back":"પાછળ","water_level_monitoring":"IIT Madras જલ વ્યવસ્થાપન","water_management":"","language_label":"ભાષા:","language_select":"ભાષા પસંદ કરો","reservoir":"જળાશય","overhead_tank":"ઓવરહેડ ટાંકી","history":"ઇતિહાસ","custom_range":"કસ્ટમ શ્રેણી","from":"થી:","to":"સુધી:","fetch_data":"ડેટા મેળવો","reservoir_history":"જળાશય જલ સ્તર ઇતિહાસ","overhead_tank_history":"ઓવરહેડ ટાંકી જલ સ્તર ઇતિહાસ","day_1":"1 દિવસ","day_2":"2 દિવસ","day_3":"3 દિવસ","day_4":"4 દિવસ","day_5":"5 દિવસ","day_6":"6 દિવસ","day_7":"7 દિવસ","waiting_for_updates":"અપડેટ્સની રાહ જોઈ રહ્યાં છીએ...","waiting_for_history":"ઇતિહાસ ડેટાની રાહ જોઈ રહ્યાં છીએ...","line_color":"આલેખ લાઇનનો રંગ","water_level_history":"જળ સ્તર ઇતિહાસ","enable_alerts":"સતર્કતા સક્ષમ કરો","repeat_alerts":"સતર્કતાને પુનરાવર્તિત કરો (દર 5 મિનિટે)","min_threshold":"ન્યૂનતમ","max_threshold":"મહત્તમ"},
+            'mr': {"app_title":"IIT मद्रास जल व्यवस्थापन","select_tank_sump":"टाकी/सम्प निवडा","install_app":"अॅप इंस्टॉल करा","back":"परत","water_level_monitoring":"IIT Madras जल व्यवस्थापन","water_management":"","language_label":"भाषा:","language_select":"भाषा निवडा","reservoir":"जलाशय","overhead_tank":"ओव्हरहेड टाकी","history":"इतिहास","custom_range":"कस्टम श्रेणी","from":"पासून:","to":"पर्यंत:","fetch_data":"डेटा मिळवा","reservoir_history":"जलाशय जल स्तर इतिहास","overhead_tank_history":"ओव्हरहेड टाकी जल स्तर इतिहास","day_1":"1 दिवस","day_2":"2 दिवस","day_3":"3 दिवस","day_4":"4 दिवस","day_5":"5 दिवस","day_6":"6 दिवस","day_7":"7 दिवस","waiting_for_updates":"अपडेट्सची प्रतीक्षा...","waiting_for_history":"इतिहास डेटाची प्रतीक्षा...","line_color":"आलेख रेषा रंग","water_level_history":"जल स्तर इतिहास","enable_alerts":"सतर्कता सक्षम करा","repeat_alerts":"सतर्कता पुनरावृत्ती करा (प्रत्येक 5 मिनिटाला)","min_threshold":"किमान","max_threshold":"कमाल"},
+            'ta': {"app_title":"ஐஐடி மெட்ராஸ் நீர் மேலாண்மை","select_tank_sump":"தொட்டி/சம்ப் தேர்வு செய்யவும்","install_app":"பயன்பாட்டை நிறுவுங்கள்","back":"பின்","water_level_monitoring":"ஐஐடி மெட்ராஸ் நீர் மேலாண்மை","water_management":"","language_label":"மொழி:","language_select":"மொழியைத் தேர்வு செய்யவும்","reservoir":"நீர்த்தேக்கம்","overhead_tank":"மேல் தொட்டி","history":"வரலாறு","custom_range":"விருப்ப வரம்பு","from":"முதல்:","to":"வரை:","fetch_data":"தரவு பெறுக","reservoir_history":"நீர்த்தேக்க நீர் மட்ட வரலாறு","overhead_tank_history":"மேல் தொட்டி நீர் மட்ட வரலாறு","day_1":"1 நாள்","day_2":"2 நாட்கள்","day_3":"3 நாட்கள்","day_4":"4 நாட்கள்","day_5":"5 நாட்கள்","day_6":"6 நாட்கள்","day_7":"7 நாட்கள்","waiting_for_updates":"புதுப்பிப்புகளுக்காக காத்திருக்கிறது...","waiting_for_history":"வரலாற்று தரவுகளுக்காக காத்திருக்கிறது...","line_color":"வரைபட கோட்டின் நிறம்","water_level_history":"நீர் மட்ட வரலாறு","enable_alerts":"எச்சரிக்கைகளை இயக்கு","repeat_alerts":"எச்சரிக்கைகளை மீண்டும் செய் (ஒவ்வொரு 5 நிமிடத்திற்கும்)","min_threshold":"குறைந்தபட்சம்","max_threshold":"அதிகபட்சம்"},
+            'te': {"app_title":"ఐ ఐ టి మద్రాసు నీటి నిర్వహణ","select_tank_sump":"ట్యాంక్/సంపు ఎంచుకోండి","install_app":"యాప్‌ను ఇన్‌స్టాల్ చేయండి","back":"వెనుకకు","water_level_monitoring":"ఐ ఐ టి మద్రాసు నీటి నిర్వహణ","water_management":"","language_label":"భాష:","language_select":"భాషను ఎంచుకోండి","reservoir":"జలాశయం","overhead_tank":"ఓవర్‌హెడ్ ట్యాంక్","history":"చరిత్ర","custom_range":"కస్టమ్ పరిధి","from":"నుండి:","to":"వరకు:","fetch_data":"డేటా పొందండి","reservoir_history":"జలాశయ నీటి స్థాయి చరిత్ర","overhead_tank_history":"ఓవర్‌హెడ్ ట్యాంక్ నీటి స్థాయి చరిత్ర","day_1":"1 రోజు","day_2":"2 రోజులు","day_3":"3 రోజులు","day_4":"4 రోజులు","day_5":"5 రోజులు","day_6":"6 రోజులు","day_7":"7 రోజులు","waiting_for_updates":"నవీకరణల కోసం ఎదురుచూస్తోంది...","waiting_for_history":"చరిత్ర డేటా కోసం ఎదురుచూస్తోంది...","line_color":"గ్రాఫ్ లైన్ రంగు","water_level_history":"నీటి స్థాయి చరిత్ర","enable_alerts":"అలర్ట్‌లను ప్రారంభించండి","repeat_alerts":"అలర్ట్‌లను పునరావృత్తి చేయండి (ప్రతి 5 నిమిషాలకు)","min_threshold":"కనిష్టం","max_threshold":"గరిష్టం"},
+            'sw': {"app_title":"Usimamizi wa Maji wa IIT Madras","select_tank_sump":"Chagua Tanki/Tangi","install_app":"Sakinisha Programu","back":"Rudi","water_level_monitoring":"Usimamizi wa Maji wa IIT Madras","water_management":"","language_label":"Lugha:","language_select":"Chagua Lugha","reservoir":"Hifadhi","overhead_tank":"Tanki la Juu","history":"Historia","custom_range":"Anuwai ya Kawaida","from":"Kutoka:","to":"Hadi:","fetch_data":"Chukua Data","reservoir_history":"Historia ya Kiwango cha Maji ya Hifadhi","overhead_tank_history":"Historia ya Kiwango cha Maji ya Tanki la Juu","day_1":"Siku 1","day_2":"Siku 2","day_3":"Siku 3","day_4":"Siku 4","day_5":"Siku 5","day_6":"Siku 6","day_7":"Siku 7","waiting_for_updates":"Inasubiri sasisho...","waiting_for_history":"Inasubiri data ya historia...","line_color":"Rangi ya Mstari wa Grafu","water_level_history":"Historia ya Kiwango cha Maji","enable_alerts":"Wezesha Onyo","repeat_alerts":"Kurudia Onyo (kila dakika 5)","min_threshold":"Kiwango cha Chini","max_threshold":"Kiwango cha Juu"}
+        };
+
+        document.addEventListener('DOMContentLoaded', updateStatusDisplay);
+
+        function updateStatusDisplay() {
+            if (typeof appConfig !== 'undefined') {
+                const pages = appConfig.getAllPages();
+                document.getElementById('pageCount').textContent = pages.length;
+                document.getElementById('pageDetails').textContent = pages.map(p => p.displayName).join(', ');
+                document.getElementById('pageKeyCount').textContent = pages.length;
+            }
+        }
+
+        function generateAndDownloadSampleCSV() {
+            if (typeof appConfig === 'undefined') {
+                showMessage('❌ config.js not loaded', 'error');
+                return;
+            }
+
+            const pages = appConfig.getAllPages();
+            let csv = 'Page ID,Display Name,Title,Sensor ID,Sensor Name,Channel ID,API Key,Field,Warning Limit,Danger Limit';
+            languages.forEach(lang => {
+                csv += `,PageName_${lang.toUpperCase()}`;
+            });
+            languages.forEach(lang => {
+                csv += `,SensorName_${lang.toUpperCase()}`;
+            });
+            csv += '\n';
+
+            // Add current pages as examples with their sensors
+            pages.forEach(page => {
+                const config = appConfig.getPage(page.id);
+                const sensors = appConfig.getSensorsForPage(page.id);
+                
+                sensors.forEach((sensor, idx) => {
+                    csv += `${config.id},${config.displayName},"${config.title}",${sensor.displayName || config.id},"${sensor.displayName || config.id}",${sensor.channelID},${sensor.apiKey},${sensor.field},${sensor.limits.warning},${sensor.limits.danger}`;
+                    // Page name translations
+                    languages.forEach(() => {
+                        csv += `,${config.displayName}`;
+                    });
+                    // Sensor name translations
+                    languages.forEach(() => {
+                        csv += `,"${sensor.displayName || config.id}"`;
+                    });
+                    csv += '\n';
+                });
+            });
+
+            downloadFile(csv, 'sample_config.csv', 'text/csv;charset=utf-8;');
+            showMessage('✅ Sample CSV downloaded!', 'success');
+        }
+
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const lines = csv.split('\n').map(line => line.trim()).filter(line => line);
+                    
+                    if (lines.length < 2) {
+                        showMessage('❌ CSV file is empty', 'error');
+                        return;
+                    }
+
+                    const headers = lines[0].split(',').map(h => h.trim());
+                    const pageIdIdx = headers.indexOf('Page ID');
+                    const displayNameIdx = headers.indexOf('Display Name');
+                    const titleIdx = headers.indexOf('Title');
+                    const sensorIdIdx = headers.indexOf('Sensor ID');
+                    const sensorNameIdx = headers.indexOf('Sensor Name');
+                    const channelIdIdx = headers.indexOf('Channel ID');
+                    const apiKeyIdx = headers.indexOf('API Key');
+                    const fieldIdx = headers.indexOf('Field');
+                    const warningIdx = headers.indexOf('Warning Limit');
+                    const dangerIdx = headers.indexOf('Danger Limit');
+
+                    if (pageIdIdx === -1 || displayNameIdx === -1) {
+                        showMessage('❌ CSV headers missing required columns', 'error');
+                        return;
+                    }
+
+                    const newConfig = { appTitle: 'IITM Water Management', defaultLanguage: 'en', pages: {} };
+                    const translations = {};
+                    languages.forEach(lang => {
+                        translations[lang] = { ...baseTranslations[lang] };
+                    });
+
+                    for (let i = 1; i < lines.length; i++) {
+                        const parts = lines[i].split(',').map(p => p.trim()).map(p => p.replace(/^"(.*)"$/, '$1'));
+                        if (parts[pageIdIdx] === '') continue;
+
+                        const pageId = parts[pageIdIdx];
+                        const displayName = parts[displayNameIdx];
+                        const title = parts[titleIdx] || displayName;
+                        const sensorId = parts[sensorIdIdx] || pageId;
+                        const sensorName = parts[sensorNameIdx] || sensorId;
+
+                        // Create page if it doesn't exist
+                        if (!newConfig.pages[pageId]) {
+                            newConfig.pages[pageId] = {
+                                id: pageId,
+                                displayName: displayName,
+                                title: title,
+                                icon: '',
+                                sensors: {}
+                            };
+
+                            // Add page translations only once per page
+                            languages.forEach((lang) => {
+                                const langIdx = headers.indexOf(`PageName_${lang.toUpperCase()}`);
+                                if (langIdx !== -1 && parts[langIdx]) {
+                                    translations[lang][`page_${pageId}`] = parts[langIdx];
+                                } else {
+                                    translations[lang][`page_${pageId}`] = displayName;
+                                }
+                            });
+                        }
+
+                        // Add sensor to the page
+                        newConfig.pages[pageId].sensors[sensorId] = {
+                            displayName: sensorName,
+                            channelID: parts[channelIdIdx] || '',
+                            apiKey: parts[apiKeyIdx] || '',
+                            field: parts[fieldIdx] || 'field1',
+                            isInteger: true,
+                            limits: {
+                                warning: parseInt(parts[warningIdx]) || 100,
+                                danger: parseInt(parts[dangerIdx]) || 50
+                            }
+                        };
+
+                        // Add sensor name translations for all languages
+                        languages.forEach((lang) => {
+                            const sensorNameLangIdx = headers.indexOf(`SensorName_${lang.toUpperCase()}`);
+                            const translationKey = `sensor_${pageId}_${sensorId}`;
+                            if (sensorNameLangIdx !== -1 && parts[sensorNameLangIdx]) {
+                                translations[lang][translationKey] = parts[sensorNameLangIdx];
+                            } else {
+                                translations[lang][translationKey] = sensorName;
+                            }
+                        });
+                    }
+
+                    window.generatedConfig = newConfig;
+                    window.generatedTranslations = translations;
+
+                    showMessage(`✅ CSV processed! ${Object.keys(newConfig.pages).length} pages configured.`, 'success');
+                } catch (error) {
+                    showMessage(`❌ Error: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadConfigJS() {
+            if (!window.generatedConfig) {
+                showMessage('❌ Upload a CSV first', 'error');
+                return;
+            }
+
+            const config = window.generatedConfig;
+            let code = '/**\n * ✅ DYNAMIC PAGE CONFIGURATION\n */\n\n';
+            code += 'const appConfig = ' + JSON.stringify(config, null, 2) + ';\n\n';
+            code += '// Helper methods for config\n';
+            code += 'appConfig.getAllPages = function() {\n';
+            code += '  return Object.values(this.pages).map(page => ({\n';
+            code += '    id: page.id,\n';
+            code += '    displayName: page.displayName,\n';
+            code += "    icon: page.icon || '📊'\n";
+            code += '  }));\n';
+            code += '};\n\n';
+            code += 'appConfig.getPage = function(pageId) {\n';
+            code += '  return this.pages[pageId];\n';
+            code += '};\n\n';
+            code += 'appConfig.getSensorsForPage = function(pageId) {\n';
+            code += '  const page = this.pages[pageId];\n';
+            code += '  return page ? Object.values(page.sensors) : [];\n';
+            code += '};\n\n';
+            code += 'if (typeof window !== "undefined") {\n    window.appConfig = appConfig;\n}\n';
+
+            downloadFile(code, 'config.js', 'text/javascript;charset=utf-8;');
+            showMessage('✅ config.js downloaded!', 'success');
+        }
+
+        function downloadAllTranslations() {
+            if (!window.generatedTranslations) {
+                showMessage('❌ Upload a CSV first', 'error');
+                return;
+            }
+
+            languages.forEach(lang => {
+                const json = JSON.stringify(window.generatedTranslations[lang], null, 2);
+                downloadFile(json, `${lang}.json`, 'application/json;charset=utf-8;');
+            });
+
+            showMessage(`✅ Downloaded ${languages.length} translation files!`, 'success');
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showMessage(text, type = 'info') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            setTimeout(() => {
+                messageEl.className = 'message';
+            }, 5000);
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const correctPassword = 'waternet@123'; // Change this to your desired password
+            
+            if (password === correctPassword) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                localStorage.setItem('adminAuthenticated', 'true');
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                setTimeout(() => {
+                    document.getElementById('errorMsg').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function checkAuthOnLoad() {
+            if (localStorage.getItem('adminAuthenticated') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthOnLoad();
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+    </script>
+    </div>
+</body>
+</html>

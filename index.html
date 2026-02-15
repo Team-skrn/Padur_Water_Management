@@ -3,42 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padur Water Management</title>
+    <title data-i18n="app_title">IIT Madras Water Management</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
     <link rel="icon" href="IIT_Madras_Logo.ico" type="image/x-icon">
-    <link rel="manifest" href="/Padur_Water_Management/manifest.json">
+    <link rel="manifest" href="/PADUR_WATER_MANAGEMENT/manifest.json">
+    <link rel="alternate" href="/PADUR_WATER_MANAGEMENT/site.webmanifest">
+    <meta name="theme-color" content="#007bff">
+    <meta name="description" content="Real-time water level monitoring system for IIT Madras">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IITM Water Mgmt">
+    <link rel="apple-touch-icon" href="IIT_Madras_Logo_192.png">
+    <script src="config.js"></script>
     
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
             text-align: center;
-            background-color: #f5f5f5;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             margin: 0;
             padding: 20px;
         }
-        h1, h2 { color: #333; }
+        h1, h2 { color: #333; font-size: 2.5em; }
+        h3 { font-size: 1.8em; }
+        .spacer {
+            height: 30px;
+            display: block;
+            margin: 0;
+        }
+        .utility-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .utility-button {
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .utility-button:hover {
+            background-color: #5a6268;
+        }
         .button-container { margin-top: 20px; }
         .dashboard-button {
             display: block;
             width: 200px;
             margin: 10px auto;
-            padding: 10px;
+            padding: 15px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             text-align: center;
+            font-size: 18px;
+            font-weight: 600;
         }
         .dashboard-button:hover { background-color: #0056b3; }
         .install-btn {
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 24px;
+            padding: 12px 24px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             display: none;
+            margin: 10px;
         }
         .update-banner {
             position: fixed;
@@ -46,10 +87,404 @@
             left: 10px;
             background: #222;
             color: #fff;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
+            font-size: 16px;
         }
+        /* Hide ALL browser translate UI */
+        [role="banner"],
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        #goog-gt-tt,
+        .skiptranslate,
+        .goog-te-notranslate,
+        .notranslate,
+        iframe[name*="google"],
+        div[id*="google"],
+        body > div:first-child,
+        html > div:first-child {
+            display: none !important;
+        }
+        html {
+            top: 0 !important;
+            margin-top: 0 !important;
+        }
+        #devtools-blocker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            z-index: 999999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #devtools-blocker h1 {
+            font-size: 32px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+        #devtools-blocker p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .language-selector-header {
+            background-color: rgba(0, 123, 255, 0.0);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 100;
+        }
+        .language-selector-header label {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0;
+            color: white;
+        }
+        .language-selector-header select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .language-selector-header select option {
+            background-color: #007bff;
+            color: white;
+        }
+        .language-selector-header select:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            min-height: 30px;
+            display: none;
+        }
+        .goog-te-combo {
+            background-color: #007bff !important;
+            color: white !important;
+            padding: 8px 12px !important;
+            border-radius: 5px !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            min-width: 60px !important;
+        }
+        .goog-te-gadget {
+            font-family: inherit !important;
+        }
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 16px;
+            }
+            .spacer {
+                height: 25px;
+            }
+            h1 {
+                font-size: 28px !important;
+                margin: 10px 0;
+            }
+            h3 {
+                font-size: 22px !important;
+                margin: 15px 0 10px 0;
+            }
+            .dashboard-button {
+                width: 90%;
+                max-width: 300px;
+                padding: 14px;
+                font-size: 16px;
+            }
+            img {
+                max-width: 90%;
+                height: auto;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+                font-size: 14px;
+            }
+            .spacer {
+                height: 20px;
+            }
+            h1 {
+                font-size: 22px !important;
+                margin: 8px 0;
+            }
+            h3 {
+                font-size: 18px !important;
+                margin: 12px 0 8px 0;
+            }
+            .dashboard-button {
+                width: 85%;
+                padding: 12px;
+                font-size: 14px;
+            }
+            img {
+                max-width: 80%;
+                height: auto;
+            }
+        }
+        @media (max-width: 360px) {
+            body {
+                padding: 6px;
+                font-size: 12px;
+            }
+            .spacer {
+                height: 18px;
+                font-size: 14px !important;
+                margin: 10px 0 6px 0;
+            }
+            .dashboard-button {
+                width: 80%;
+                padding: 10px;
+                font-size: 13px;
+            }
+            img {
+                max-width: 70%;
+                height: auto;
+            }
+            }
+        
+        /* ✅ Global Alert Settings Modal Styles */
+        .alert-settings-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            cursor: pointer;
+        }
+        
+        .alert-settings-overlay.active {
+            display: block;
+        }
+        
+        .alert-settings-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .alert-settings-modal.active {
+            display: block;
+        }
+        
+        .alert-settings-modal h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.5em;
+        }
+        
+        /* Alert Settings Modal Accordion Styles */
+        .alert-page-accordion {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .alert-page-header {
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            user-select: none;
+        }
+        
+        .alert-page-header:hover {
+            background-color: #0056b3;
+        }
+        
+        .alert-page-content {
+            display: none;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .alert-page-content.active {
+            display: block;
+        }
+        
+        .sensor-settings {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .sensor-settings label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .sensor-checkbox-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .sensor-checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .threshold-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .threshold-inputs input[type="number"] {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+            
     </style>
+    <!-- New Translation System -->
+    <script src="translation-manager.js"></script>
+    <script>
+        // Disable Developer Tools (F12, Ctrl+Shift+I, Ctrl+Shift+C, Right-click)
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+C (Inspect Element)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Detect DevTools opening via console check
+        let devtools = { open: false };
+        const threshold = 160;
+        
+        function checkDevTools() {
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            
+            if (widthThreshold || heightThreshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    showDevToolsBlocker();
+                }
+            } else {
+                if (devtools.open) {
+                    devtools.open = false;
+                    hideDevToolsBlocker();
+                }
+            }
+        }
+        
+        function showDevToolsBlocker() {
+            const blocker = document.getElementById('devtools-blocker');
+            if (blocker) {
+                blocker.style.display = 'flex';
+            }
+        }
+        
+        function hideDevToolsBlocker() {
+            const blocker = document.getElementById('devtools-blocker');
+            if (blocker) {
+                blocker.style.display = 'none';
+            }
+        }
+        
+        // Check every 200ms for DevTools
+        setInterval(checkDevTools, 200);
+        
+        // Disable console logs (set to true to enable debug logs)
+        const DEBUG_MODE = false;
+        if (!DEBUG_MODE) {
+            console.log = function() {};
+            console.error = function() {};
+            console.warn = function() {};
+            console.info = function() {};
+        }
+        
+        // ✅ Initialize Translation Manager with safety checks
+        let translationManager;
+        
+        // Wait a bit to ensure TranslationManager class is loaded
+        setTimeout(() => {
+            if (typeof TranslationManager === 'undefined') {
+                console.error('❌ TranslationManager class not loaded!');
+                return;
+            }
+            translationManager = new TranslationManager();
+            console.log('✅ translationManager initialized:', translationManager);
+            
+            // Verify translate method exists
+            if (typeof translationManager.translate === 'function') {
+                console.log('✅ translate() method available');
+            } else {
+                console.error('❌ translate() method NOT available!');
+            }
+        }, 100);
+    </script>
 <!--     <script>
         const correctPassword = "Padur@123"; // Change this to your password
 
@@ -69,28 +504,335 @@
     </script> -->
 </head>
 <body>
+    <!-- DevTools Blocker Overlay -->
+    <div id="devtools-blocker">
+        <h1>⚠️ Developer Tools Disabled</h1>
+        <p>Developer Tools are not allowed on this page.</p>
+        <p>Close the DevTools and refresh the page to continue.</p>
+    </div>
+    
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+    
+    <img src="IIT_Madras_Logo.png" alt="IITM Logo" width="250">
+    <h1 data-i18n="app_title">IIT Madras Water Management</h1>
+    <h2></h2>
 
-    <img src="IIT_Madras_Logo.png" alt="IIT Madras Logo" width="250">
-    <h1>Padur Water Management</h1>
-    <h2>By IIT Madras</h2>
-
-<!--     <h3> - TEST 2 - </h3> -->
-
-    <h3>Language / भाषा / மொழி</h3>
-    <div class="button-container">
-        <a href="Tank_select_eng.html" class="dashboard-button">English</a>
-        <a href="Tank_select_hin.html" class="dashboard-button">हिन्दी</a>
-        <a href="Tank_select_tam.html" class="dashboard-button">தமிழ்</a>
+    <h3 data-i18n="select_tank_sump">Select the Tank/Sump</h3>
+    <div class="button-container" id="dynamicButtonsContainer">
+        <!-- Dynamically generated from config.js -->
     </div>
 
-    <button id="install-button" class="install-btn" onclick="installPWA()">Install App</button>
+    <button id="install-button" class="install-btn" data-i18n="install_app" onclick="installPWA()">Install App</button>
+    <button id="notification-button" class="install-btn" style="display: none; background-color: #28a745;" onclick="requestNotificationPermission()" title="Enable push notifications for water level updates">🔔 Enable Notifications</button>
+    
+    <div class="utility-buttons">
+        <button class="utility-button" onclick="clearCacheAndRefresh()" title="Clear all cached data and reset the app" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); font-weight: bold; font-size: 16px; padding: 12px 20px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); transition: all 0.3s ease;">CLEAR APP DATA</button>
+        <!-- ALERT SETTINGS DISABLED: Button removed from UI
+        <button class="utility-button" onclick="openGlobalAlertSettings()" style="background-color: #17a2b8;" title="Configure alert thresholds for all pages">⚙️ Alert Settings</button>
+        -->
+    </div>
+
+    <!-- ALERT SETTINGS MODAL DISABLED: Entire modal hidden
+    <div class="alert-settings-overlay" id="alertSettingsOverlay" onclick="closeGlobalAlertSettings()"></div>
+    <div class="alert-settings-modal" id="alertSettingsModal">
+        <h3>⚙️ Configure Alert Settings</h3>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Set threshold alerts for all pages and sensors in one place</p>
+        
+        <!-- Global Toggle Controls -->
+        <!--
+        <div style="background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <input type="checkbox" id="enableAllAlerts" style="width: 20px; height: 20px; cursor: pointer;">
+                <label for="enableAllAlerts" style="margin-left: 10px; cursor: pointer; font-weight: 600;">Enable All Threshold Alerts</label>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="enableAllRepeating" style="width: 20px; height: 20px; cursor: pointer;">
+                <label for="enableAllRepeating" style="margin-left: 10px; cursor: pointer; font-weight: 600;">Enable Repeating Alerts (every 5 mins)</label>
+            </div>
+        </div>
+        
+        <!-- Dynamically Generated Pages Section -->
+        <!--
+        <div id="alertPagesContainer" style="margin-bottom: 20px;">
+            <!-- Will be populated by JavaScript -->
+        <!--
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button class="utility-button" onclick="saveAlertSettingsFromModal()" style="flex: 1; background-color: #28a745;">💾 Save Settings</button>
+            <button class="utility-button" onclick="closeGlobalAlertSettings()" style="flex: 1;">❌ Close</button>
+        </div>
+        -->
+    </div>
 
     <script>
+        // ✅ GENERATE DYNAMIC BUTTONS FROM CONFIG
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const container = document.getElementById('dynamicButtonsContainer');
+                const pages = appConfig.getAllPages();
+                
+                // ✅ Wait for translationManager to be initialized
+                let retries = 0;
+                while (!translationManager && retries < 20) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    retries++;
+                }
+                
+                if (!translationManager) {
+                    console.error('❌ translationManager failed to initialize');
+                    // Fallback: use displayNames without translation
+                    pages.forEach(page => {
+                        const button = document.createElement('a');
+                        button.href = `app.html?page=${page.id}`;
+                        button.className = 'dashboard-button';
+                        button.innerHTML = `${page.icon} ${page.displayName}`;
+                        container.appendChild(button);
+                    });
+                    return;
+                }
+                
+                // ✅ WAIT for translation manager to load translations first
+                const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+                await translationManager.setLanguage(savedLanguage);
+                
+                // Now generate buttons with translations ready
+                pages.forEach(page => {
+                    const button = document.createElement('a');
+                    button.href = `app.html?page=${page.id}`;
+                    button.className = 'dashboard-button';
+                    
+                    // Use translation key for page name (e.g., page_main_sump)
+                    const pageTranslationKey = `page_${page.id}`;
+                    const translatedName = translationManager.translate(pageTranslationKey) || page.displayName;
+                    
+                    button.innerHTML = `${page.icon} ${translatedName}`;
+                    button.setAttribute('data-i18n', pageTranslationKey);
+                    button.setAttribute('data-display-name', page.displayName); // Store default for fallback
+                    container.appendChild(button);
+                });
+                
+                // Apply translations after buttons are created
+                setTimeout(() => {
+                    translationManager.applyTranslations();
+                }, 100);
+            } catch (error) {
+                console.error('❌ Error generating buttons:', error);
+            }
+        });
+
+        async function clearCacheAndRefresh() {
+            try {
+                // Unregister all service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        registration.unregister();
+                        console.log('✅ Service Worker unregistered');
+                    }
+                }
+                
+                // Clear all caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+                    console.log('✅ Cache cleared');
+                }
+                
+                // Clear localStorage - removes all stored settings/preferences
+                console.log('Clearing localStorage...');
+                const localStorageKeys = Object.keys(localStorage);
+                console.log('Keys to delete:', localStorageKeys);
+                localStorage.clear();
+                console.log('✅ localStorage cleared');
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                console.log('✅ sessionStorage cleared');
+                
+                // Clear all IndexedDB databases
+                if ('indexedDB' in window) {
+                    const dbs = await indexedDB.databases();
+                    dbs.forEach(db => {
+                        indexedDB.deleteDatabase(db.name);
+                        console.log(`✅ IndexedDB database '${db.name}' deleted`);
+                    });
+                }
+                
+                alert('✅ All cache and memory cleared! Refreshing app...');
+                location.reload();
+            } catch (error) {
+                console.error('❌ Error clearing cache:', error);
+                alert('Error clearing cache. Refreshing page...');
+                location.reload();
+            }
+        }
+        
+        // ✅ Notification Permission Request
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'granted') {
+                    alert('✅ Notifications already enabled!');
+                    return;
+                }
+                
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        localStorage.setItem('notificationsEnabled', 'true');
+                        new Notification('🔔 Notifications Enabled!', {
+                            body: 'You will now receive updates about water level changes.',
+                            icon: 'IIT_Madras_Logo_192.png',
+                            badge: 'IIT_Madras_Logo.ico'
+                        });
+                        console.log('✅ Notifications enabled');
+                        document.getElementById('notification-button').textContent = '✅ Notifications Enabled';
+                        document.getElementById('notification-button').disabled = true;
+                    } else {
+                        alert('Notifications permission denied.');
+                        localStorage.setItem('notificationsEnabled', 'false');
+                    }
+                });
+            } else {
+                alert('Your browser does not support notifications.');
+            }
+        }
+        
+        // ✅ Show Notification
+        function showNotification(title, options = {}) {
+            if (localStorage.getItem('notificationsEnabled') === 'true' && 'Notification' in window) {
+                if (Notification.permission === 'granted') {
+                    new Notification(title, {
+                        icon: 'IIT_Madras_Logo_192.png',
+                        badge: 'IIT_Madras_Logo.ico',
+                        ...options
+                    });
+                }
+            }
+        }
+        
+        function changeLanguage(lang) {
+            translationManager.setLanguage(lang);
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // ✅ Auto-request Notification Permission on Load
+        function autoRequestNotifications() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        localStorage.setItem('notificationsEnabled', 'true');
+                        console.log('✅ Notifications auto-enabled');
+                        const btn = document.getElementById('notification-button');
+                        if (btn) {
+                            btn.textContent = '✅ Notifications Enabled';
+                            btn.disabled = true;
+                            btn.style.display = 'none';
+                        }
+                    } else {
+                        localStorage.setItem('notificationsEnabled', 'false');
+                        console.log('⚠️ Notifications permission denied');
+                    }
+                });
+            } else if ('Notification' in window && Notification.permission === 'granted') {
+                localStorage.setItem('notificationsEnabled', 'true');
+                const btn = document.getElementById('notification-button');
+                if (btn) {
+                    btn.textContent = '✅ Notifications Enabled';
+                    btn.disabled = true;
+                    btn.style.display = 'none';
+                }
+            }
+        }
+
+        // ✅ Request Background Execution Permission
+        function requestBackgroundPermission() {
+            if ('permissions' in navigator) {
+                navigator.permissions.query({ name: 'background-execution' }).then(result => {
+                    if (result.state === 'denied') {
+                        console.log('⚠️ Background execution permission denied');
+                        return;
+                    }
+                    if (result.state === 'granted' || result.state === 'prompt') {
+                        console.log('✅ Background execution permission granted/available');
+                        localStorage.setItem('backgroundMonitoringEnabled', 'true');
+                        enableBackgroundMonitoring();
+                    }
+                });
+            }
+            
+            // Android specific: Request SCHEDULE_EXACT_ALARM permission via manifest
+            if ('WakeLock' in navigator) {
+                console.log('✅ Wake Lock API available - can keep device awake during monitoring');
+            }
+        }
+
+        // ✅ Enable Background Monitoring with Wake Lock
+        async function enableBackgroundMonitoring() {
+            try {
+                if ('WakeLock' in navigator) {
+                    const wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('✅ Wake Lock acquired - device will stay awake');
+                    
+                    // Release wake lock if user minimizes app
+                    document.addEventListener('visibilitychange', async () => {
+                        if (document.hidden) {
+                            wakeLock.release();
+                            console.log('✅ Wake Lock released - app in background');
+                        } else {
+                            try {
+                                const newWakeLock = await navigator.wakeLock.request('screen');
+                                console.log('✅ Wake Lock re-acquired - app back in foreground');
+                            } catch (err) {
+                                console.error('Wake Lock request failed:', err);
+                            }
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Wake Lock request failed:', err);
+            }
+
+            // Request Service Worker periodic sync every 15 seconds (if supported)
+            if ('serviceWorker' in navigator && 'periodicSync' in ServiceWorkerRegistration.prototype) {
+                try {
+                    const registration = await navigator.serviceWorker.ready;
+                    await registration.periodicSync.register('check-water-levels', {
+                        minInterval: 15 * 1000 // 15 seconds
+                    });
+                    console.log('✅ Periodic background sync registered');
+                    localStorage.setItem('backgroundSyncEnabled', 'true');
+                } catch (error) {
+                    console.log('⚠️ Periodic sync not available:', error);
+                }
+            }
+        }
+
+        // ✅ Update UI after language loads (set select dropdown)
+        async function updateLanguageUI() {
+            const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+            if (document.getElementById('language-select')) {
+                document.getElementById('language-select').value = savedLanguage;
+            }
+        }
+
+        // ✅ Request permissions after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLanguageUI();
+            autoRequestNotifications();
+            requestBackgroundPermission();
+        });
+
         // ✅ Register Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/Padur_Water_Management/service-worker.js')
+            navigator.serviceWorker.register('/PADUR_WATER_MANAGEMENT/service-worker.js')
                 .then((reg) => {
-                    console.log("Service Worker Registered");
+                    console.log("✅ Service Worker Registered successfully");
+                    // Check for updates every minute
+                    setInterval(() => {
+                        reg.update();
+                    }, 60000);
+                    
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
@@ -99,7 +841,9 @@
                             }
                         };
                     };
-                }).catch((err) => console.error("Service Worker Registration Failed", err));
+                }).catch((err) => console.error("❌ Service Worker Registration Failed:", err));
+        } else {
+            console.warn("⚠️ Service Workers not supported in this browser");
         }
 
         // ✅ Show update notification
@@ -130,6 +874,214 @@
             }
         }
 
+        // ✅ PAGE CONFIGURATION FOR ALERT SETTINGS
+        const allPagesConfig = {
+            'reservoir': {
+                displayName: 'Reservoir',
+                sensors: ['Reservoir', 'Main_Sump', 'Pampa_Sump', 'ICSR_Sump']
+            },
+            'overheadTank': {
+                displayName: 'Overhead Tank',
+                sensors: ['OverheadTank', 'BoreWell_Sump', 'Return_Sump', 'WashOut_Sump']
+            }
+        };
+        
+        // ✅ Get Global Alert Settings
+        function getGlobalAlertSettings() {
+            const defaults = {
+                enabledAlerts: {},
+                enabledRepeating: {},
+                thresholds: {}
+            };
+            
+            Object.values(allPagesConfig).forEach(page => {
+                page.sensors.forEach(sensor => {
+                    defaults.enabledAlerts[sensor] = true;
+                    defaults.enabledRepeating[sensor] = false;
+                    defaults.thresholds[sensor] = { min: null, max: null };
+                });
+            });
+            
+            const saved = localStorage.getItem('globalAlertSettings');
+            if (!saved) return defaults;
+            
+            try {
+                const parsed = JSON.parse(saved);
+                return {
+                    enabledAlerts: { ...defaults.enabledAlerts, ...parsed.enabledAlerts },
+                    enabledRepeating: { ...defaults.enabledRepeating, ...parsed.enabledRepeating },
+                    thresholds: { ...defaults.thresholds, ...parsed.thresholds }
+                };
+            } catch (e) {
+                console.error('Error parsing alert settings:', e);
+                return defaults;
+            }
+        }
+        
+        // ✅ Save Global Alert Settings
+        function saveGlobalAlertSettings(settings) {
+            try {
+                localStorage.setItem('globalAlertSettings', JSON.stringify(settings));
+            } catch (e) {
+                console.error('Error saving alert settings:', e);
+                alert('Error saving settings: ' + e.message);
+            }
+        }
+        
+        // ✅ Render Dynamic Alert Settings Modal
+        /* ====================================================================
+           ALERT SETTINGS FUNCTIONS - ALL DISABLED
+           ====================================================================
+           REASON: Alert configuration system disabled globally in frontend
+           
+           DISABLED FUNCTIONS:
+           - renderAlertSettingsModal() - Generates modal HTML with all page/sensor settings
+           - toggleAlertPage() - Toggles accordion sections in modal
+           - saveAlertSettingsFromModal() - Collects and saves settings from modal
+           - openGlobalAlertSettings() - Opens the settings modal
+           - closeGlobalAlertSettings() - Closes the settings modal
+           
+           DISABLED HELPER:
+           - getGlobalAlertSettings() - Also disabled in app.html
+           - saveGlobalAlertSettings() - Also disabled in app.html
+           
+           DISABLED HTML:
+           - Alert Settings button (line 417)
+           - alert-settings-overlay modal (lines 422-445)
+           
+           WHEN RE-ENABLING:
+           1. Uncomment all functions below
+           2. Uncomment Alert Settings button in HTML
+           3. Uncomment alert-settings-modal HTML
+           4. Test modal opens with all pages/sensors loaded
+           5. Verify settings save to localStorage
+           ====================================================================== */
+        
+        /*
+        function renderAlertSettingsModal() {
+            const container = document.getElementById('alertPagesContainer');
+            const pages = appConfig.getAllPages();
+            const settings = getGlobalAlertSettings();
+            
+            container.innerHTML = '';
+            
+            pages.forEach(page => {
+                const pageId = page.id;
+                const pageConfig = appConfig.getPage(pageId);
+                const sensors = Object.keys(pageConfig.sensors);
+                
+                // Create accordion section for this page
+                const accordion = document.createElement('div');
+                accordion.className = 'alert-page-accordion';
+                accordion.innerHTML = `
+                    <div class="alert-page-header" onclick="toggleAlertPage(this)">
+                        <span>${page.icon} ${page.displayName}</span>
+                        <span style="font-size: 14px;">▼</span>
+                    </div>
+                    <div class="alert-page-content" id="page-${pageId}">
+                        ${sensors.map(sensorName => `
+                            <div class="sensor-settings">
+                                <label>${sensorName}</label>
+                                <div class="sensor-checkbox-group">
+                                    <input type="checkbox" class="alert-enable" data-sensor="${sensorName}" ${settings.enabledAlerts[sensorName] ? 'checked' : ''}>
+                                    <label style="margin: 0; font-weight: normal;">Enable Alerts</label>
+                                </div>
+                                <div class="sensor-checkbox-group">
+                                    <input type="checkbox" class="alert-repeating" data-sensor="${sensorName}" ${settings.enabledRepeating[sensorName] ? 'checked' : ''}>
+                                    <label style="margin: 0; font-weight: normal;">Repeating (every 5 mins)</label>
+                                </div>
+                                <div class="threshold-inputs">
+                                    <label style="margin: 0; font-weight: normal;">Min:</label>
+                                    <input type="number" class="threshold-min" data-sensor="${sensorName}" value="${settings.thresholds[sensorName]?.min || ''}" placeholder="cm">
+                                    <label style="margin: 0; font-weight: normal;">Max:</label>
+                                    <input type="number" class="threshold-max" data-sensor="${sensorName}" value="${settings.thresholds[sensorName]?.max || ''}" placeholder="cm">
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(accordion);
+            });
+            
+            // Update global toggles
+            const allAlerts = settings.enabledAlerts;
+            const allRepeating = settings.enabledRepeating;
+            const enableAllAlertsCheckbox = document.getElementById('enableAllAlerts');
+            const enableAllRepeatingCheckbox = document.getElementById('enableAllRepeating');
+            
+            enableAllAlertsCheckbox.checked = Object.values(allAlerts).every(v => v === true);
+            enableAllRepeatingCheckbox.checked = Object.values(allRepeating).every(v => v === true);
+            
+            // Add global toggle listeners
+            enableAllAlertsCheckbox.addEventListener('change', function() {
+                document.querySelectorAll('.alert-enable').forEach(cb => cb.checked = this.checked);
+            });
+            
+            enableAllRepeatingCheckbox.addEventListener('change', function() {
+                document.querySelectorAll('.alert-repeating').forEach(cb => cb.checked = this.checked);
+            });
+        }
+        
+        // ✅ Toggle Accordion Page
+        function toggleAlertPage(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const arrow = header.querySelector('span:last-child');
+            arrow.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+            arrow.style.transition = 'transform 0.3s';
+        }
+        
+        // ✅ Save Alert Settings from Modal
+        function saveAlertSettingsFromModal() {
+            const settings = {
+                enabledAlerts: {},
+                enabledRepeating: {},
+                thresholds: {}
+            };
+            
+            // Collect all sensor settings
+            document.querySelectorAll('.alert-enable').forEach(checkbox => {
+                const sensor = checkbox.getAttribute('data-sensor');
+                settings.enabledAlerts[sensor] = checkbox.checked;
+            });
+            
+            document.querySelectorAll('.alert-repeating').forEach(checkbox => {
+                const sensor = checkbox.getAttribute('data-sensor');
+                settings.enabledRepeating[sensor] = checkbox.checked;
+            });
+            
+            document.querySelectorAll('.threshold-min').forEach(input => {
+                const sensor = input.getAttribute('data-sensor');
+                if (!settings.thresholds[sensor]) settings.thresholds[sensor] = {};
+                settings.thresholds[sensor].min = input.value ? parseFloat(input.value) : null;
+            });
+            
+            document.querySelectorAll('.threshold-max').forEach(input => {
+                const sensor = input.getAttribute('data-sensor');
+                if (!settings.thresholds[sensor]) settings.thresholds[sensor] = {};
+                settings.thresholds[sensor].max = input.value ? parseFloat(input.value) : null;
+            });
+            
+            saveGlobalAlertSettings(settings);
+            alert('✅ Alert settings saved successfully!');
+            closeGlobalAlertSettings();
+        }
+        
+        // ✅ Open Global Alert Settings
+        function openGlobalAlertSettings() {
+            renderAlertSettingsModal();
+            document.getElementById('alertSettingsOverlay').classList.add('active');
+            document.getElementById('alertSettingsModal').classList.add('active');
+        }
+        
+        // ✅ Close Global Alert Settings
+        function closeGlobalAlertSettings() {
+            document.getElementById('alertSettingsOverlay').classList.remove('active');
+            document.getElementById('alertSettingsModal').classList.remove('active');
+        }
+        */
+
         // ✅ Force Update Check on Load
         if (navigator.serviceWorker) {
             navigator.serviceWorker.getRegistration().then((reg) => {
@@ -142,3 +1094,6 @@
 
 </body>
 </html>
+
+
+
