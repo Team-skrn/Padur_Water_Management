@@ -16,7 +16,7 @@ const appConfig = {
           "displayName": "Tank 1",
           "channelID": "3242498",
           "apiKey": "MGJ0PCCTOIWBF5JL",
-          "field": "2",
+          "field": "field2",
           "isInteger": true,
           "limits": {
             "warning": 150,
@@ -35,7 +35,7 @@ const appConfig = {
           "displayName": "Tank 2",
           "channelID": "2691178",
           "apiKey": "7B33G54EII311842",
-          "field": "1",
+          "field": "field1",
           "isInteger": true,
           "limits": {
             "warning": 150,
@@ -54,7 +54,7 @@ const appConfig = {
           "displayName": "Tank 3",
           "channelID": "2691178",
           "apiKey": "7B33G54EII311842",
-          "field": "3",
+          "field": "field3",
           "isInteger": true,
           "limits": {
             "warning": 150,
@@ -73,7 +73,7 @@ const appConfig = {
           "displayName": "Tank 4",
           "channelID": "2691178",
           "apiKey": "7B33G54EII311842",
-          "field": "5",
+          "field": "field5",
           "isInteger": true,
           "limits": {
             "warning": 150,
