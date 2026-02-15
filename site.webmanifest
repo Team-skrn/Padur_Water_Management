@@ -1,15 +1,15 @@
 {
-  "name": "PADUR WATER MANAGEMENT",
+  "name": "Padur Water Management",
   "short_name": "Padur Water",
   "icons": [
     {
-      "src": "/PADUR_WATER_MANAGEMENT/IIT_Madras_Logo_192.png",
+      "src": "/Padur_Water_Management/IIT_Madras_Logo_192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/PADUR_WATER_MANAGEMENT/IIT_Madras_Logo_512.png",
+      "src": "/Padur_Water_Management/IIT_Madras_Logo_512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -18,5 +18,5 @@
   "theme_color": "#007bff",
   "background_color": "#ffffff",
   "display": "standalone",
-  "start_url": "/IITMZ_WDN/"
+  "start_url": "/Padur_Water_Management/"
 }

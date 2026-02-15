@@ -1,7 +1,7 @@
 {
   "name": "Padur Water Management",
   "short_name": "Padur Water Mgmt",
-  "start_url": "/PADUR_WATER_MANAGEMENT/",
+  "start_url": "/Padur_Water_Management/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
