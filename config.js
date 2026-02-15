@@ -3,159 +3,80 @@
  */
 
 const appConfig = {
-  "appTitle": "IITM Water Management",
+  "appTitle": "Padur Water Management",
   "defaultLanguage": "en",
   "pages": {
-    "main_sump": {
-      "id": "main_sump",
-      "displayName": "Main Sump",
-      "title": "Main Sump Water Level Monitoring",
+    "tank_1": {
+      "id": "tank_1",
+      "displayName": "Tank 1",
+      "title": "Tank 1 Water Level Monitoring",
       "icon": "",
       "sensors": {
-        "Main Sump": {
-          "displayName": "Main Sump",
-          "channelID": "3156369",
-          "apiKey": "CU8K2JLAOSV53K4X",
-          "field": "field3",
-          "isInteger": true,
-          "limits": {
-            "warning": 300,
-            "danger": 100
-          }
-        }
-      }
-    },
-    "pampa": {
-      "id": "pampa",
-      "displayName": "Pampa Sump",
-      "title": "Pampa Sump Water Level Monitoring",
-      "icon": "",
-      "sensors": {
-        "Pampa Sump": {
-          "displayName": "Pampa Sump",
-          "channelID": "2322174",
-          "apiKey": "9VMWLF58YXMSKZ4O",
-          "field": "field1",
-          "isInteger": true,
-          "limits": {
-            "warning": 100,
-            "danger": 60
-          }
-        }
-      }
-    },
-    "himalaya": {
-      "id": "himalaya",
-      "displayName": "Himalaya OHT",
-      "title": "Himalaya OHT Water Level Monitoring",
-      "icon": "",
-      "sensors": {
-        "Himalaya OHT": {
-          "displayName": "Himalaya OHT",
-          "channelID": "2322174",
-          "apiKey": "9VMWLF58YXMSKZ4O",
-          "field": "field7",
+        "tank_1": {
+          "displayName": "Tank 1",
+          "channelID": "3242498",
+          "apiKey": "MGJ0PCCTOIWBF5JL",
+          "field": "2",
           "isInteger": true,
           "limits": {
             "warning": 150,
-            "danger": 60
-          }
-        }
-      }
-    },
-    "mandakini": {
-      "id": "mandakini",
-      "displayName": "Mandakini Sump",
-      "title": "Mandakini Water Level Monitoring",
-      "icon": "",
-      "sensors": {
-        "Mandakini Sump": {
-          "displayName": "Mandakini Sump",
-          "channelID": "2592245",
-          "apiKey": "KI554EX3UF1UNCO9",
-          "field": "field1",
-          "isInteger": true,
-          "limits": {
-            "warning": 150,
-            "danger": 70
-          }
-        }
-      }
-    },
-    "ICSR": {
-      "id": "ICSR",
-      "displayName": "ICSR",
-      "title": "ICSR Water Level Monitoring",
-      "icon": "",
-      "sensors": {
-        "ICSR_1": {
-          "displayName": "ICSR Sump",
-          "channelID": "2511342",
-          "apiKey": "IFAV1XCYUFW5Y478",
-          "field": "field1",
-          "isInteger": true,
-          "limits": {
-            "warning": 100,
-            "danger": 60
-          }
-        },
-        "ICSR_2": {
-          "displayName": "ICSR OHT",
-          "channelID": "2511342",
-          "apiKey": "IFAV1XCYUFW5Y478",
-          "field": "field6",
-          "isInteger": true,
-          "limits": {
-            "warning": 50,
-            "danger": 30
-          }
-        }
-      }
-    },
-    "C2_Sump": {
-      "id": "C2_Sump",
-      "displayName": "C2 Sump",
-      "title": "C2 Sump Water Level Monitoring",
-      "icon": "",
-      "sensors": {
-        "C2_Sump": {
-          "displayName": "C2 Sump",
-          "channelID": "2177700",
-          "apiKey": "9OY9NTLLOW1NHUXZ",
-          "field": "field1",
-          "isInteger": true,
-          "limits": {
-            "warning": 100,
             "danger": 50
           }
         }
       }
     },
-    "NAC_2": {
-      "id": "NAC_2",
-      "displayName": "NAC 2",
-      "title": "NAC 2 Water Level Monitoring",
+    "tank_2": {
+      "id": "tank_2",
+      "displayName": "Tank 2",
+      "title": "Tank 2 Water Level Monitoring",
       "icon": "",
       "sensors": {
-        "NAC2_Grey": {
-          "displayName": "NAC 2 Grey Water",
-          "channelID": "3216774",
-          "apiKey": "KGC4A4F0EESD4RR0",
-          "field": "field2",
+        "tank_2": {
+          "displayName": "Tank 2",
+          "channelID": "2691178",
+          "apiKey": "7B33G54EII311842",
+          "field": "1",
           "isInteger": true,
           "limits": {
-            "warning": 100,
+            "warning": 150,
             "danger": 50
           }
-        },
-        "NAC2_Metro": {
-          "displayName": "NAC 2 Metro Water",
-          "channelID": "3216774",
-          "apiKey": "KGC4A4F0EESD4RR0",
-          "field": "field5",
+        }
+      }
+    },
+    "tank_3": {
+      "id": "tank_3",
+      "displayName": "Tank 3",
+      "title": "Tank 3 Water Level Monitoring",
+      "icon": "",
+      "sensors": {
+        "tank_3": {
+          "displayName": "Tank 3",
+          "channelID": "2691178",
+          "apiKey": "7B33G54EII311842",
+          "field": "3",
           "isInteger": true,
           "limits": {
-            "warning": 100,
+            "warning": 150,
+            "danger": 50
+          }
+        }
+      }
+    },
+    "tank_4": {
+      "id": "tank_4",
+      "displayName": "Tank 4",
+      "title": "Tank 4 Water Level Monitoring",
+      "icon": "",
+      "sensors": {
+        "tank_4": {
+          "displayName": "Tank 4",
+          "channelID": "2691178",
+          "apiKey": "7B33G54EII311842",
+          "field": "5",
+          "isInteger": true,
+          "limits": {
+            "warning": 150,
             "danger": 50
           }
         }
